@@ -1,7 +1,12 @@
+import "./UserCard.css"
+
 type User = {
   id: number
   name: string
   email: string
+   address: {
+    city: string
+  }
 }
 
 type Props = {
@@ -11,9 +16,10 @@ type Props = {
 function UserCard({ user }: Props) {
 
   return (
-    <div>
-      <h3>{user.name}</h3>
-      <p>{user.email}</p>
+    <div className="user-card">
+      <div className="user-name">{user.name}</div>
+      <div className="user-email">{user.email}</div>
+      <div className="user-city">{user.address.city}</div>
     </div>
   )
 

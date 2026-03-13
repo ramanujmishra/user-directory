@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import UserCard from "./components/UserCard";
 
 
 type User = {
@@ -32,24 +33,29 @@ function App() {
   );
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div className="app-container" style={{ padding: "20px" }}>
 
-      <h1>User Directory</h1>
+      <div className="header">Users Directory</div>
 
-      <input
+      <input className="search-box"
         placeholder="Search users..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
 
       
-      {filteredUsers.map(user => (
+      {/* {filteredUsers.map(user => (
         <div key={user.id} style={{ marginTop: "10px" }}>
           <b>{user.name}</b>
           <div>{user.email}</div>
           <div>{user.address.city}</div>
         </div>
+      ))} */}
+
+       {filteredUsers.map(user => (
+        <UserCard key={user.id} user={user} />
       ))}
+
 
     </div>
   );
