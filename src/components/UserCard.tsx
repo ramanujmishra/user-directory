@@ -1,13 +1,14 @@
 import "./UserCard.css"
+import type { User } from "../types/User"
 
-type User = {
-  id: number
-  name: string
-  email: string
-   address: {
-    city: string
-  }
-}
+// type User = {
+//   id: number
+//   name: string
+//   email: string
+//    address: {
+//     city: string
+//   }
+// }
 
 type Props = {
   user: User
