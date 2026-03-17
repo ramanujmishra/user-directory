@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import "../components/LoginPage.css"
 
 function Login() {
 
@@ -8,50 +9,77 @@ function Login() {
 
   const navigate = useNavigate()
 
-  const handleLogin = () => {
-    console.log("Login clicked")
+  // const handleLogin = () => {
+  //   console.log("Login clicked")
 
-    if (username === "admin" && password === "1234") {
+  //   if (username === "admin" && password === "1234") {
 
-      const fakeToken = "demo-jwt-token"
+  //     const fakeToken = "demo-jwt-token"
 
-      localStorage.setItem("token", fakeToken)
+  //     localStorage.setItem("token", fakeToken)
 
-      navigate("/users")
+  //     navigate("/users")
 
-    } else {
-      alert("Invalid credentials")
+  //   } else {
+  //     alert("Invalid credentials")
+  //   }
+  // }
+  
+  const handleLogin = async () => {
+    console.log("Login clicked");
+
+    const response = await fetch(`https://localhost:7032/login?Username=${username}&Password=${password}`,{
+      method: "POST"
+     
+    });
+
+   
+    if(!response.ok)
+    {
+      console.log("Login failed");
+      alert("Invalid credentials");
+      return;
     }
-  }
 
-  return (
+     let data =  await response.json();
+     const token = data.token;
 
-    <div style={{ padding: "20px" }}>
+     if(token){
+      localStorage.setItem("token", token);
+      navigate("/users");
+     }
+     else{
+      console.log("token not found in response");
+      alert("Login failed");
+     }
+    };
+    
+    return (
 
-      <h2>Login</h2>
+    <div className="login-container">
+    <div className="login-card">
+    <h2>Login</h2>
 
-      <input 
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
+    <input
+      className="login-input"
+      placeholder="Username"
+      value={username}
+      onChange={(e) => setUsername(e.target.value)}
+    />
 
-      <br /><br />
+    <input
+      className="login-input"
+      type="password"
+      placeholder="Password"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+    />
 
-      <input 
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-
-      <br /><br />
-
-      <button type="button" onClick={handleLogin}>
-        Login
-      </button>
-
-    </div>
+    <button className="login-btn" onClick={handleLogin}>
+      Login
+    </button>
+  </div>
+</div>
   )
 }
 

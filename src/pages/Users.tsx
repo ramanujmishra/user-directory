@@ -11,17 +11,35 @@ function Users() {
 
   const navigate = useNavigate()
 
-  useEffect(() => {
+  // useEffect(() => {
+
+  //   const token = localStorage.getItem("token")
+
+  //   fetch("https://jsonplaceholder.typicode.com/users", {
+  //     headers: {
+  //       Authorization: `Bearer ${token}`
+  //     }
+  //   })
+  //     .then(res => res.json())
+  //     .then(data => {
+  //       setUsers(data)
+  //       setLoading(false)
+  //     })
+
+  // }, [])
+
+    useEffect(() => {
 
     const token = localStorage.getItem("token")
 
-    fetch("https://jsonplaceholder.typicode.com/users", {
+    fetch("https://localhost:7032/api/users", {
       headers: {
         Authorization: `Bearer ${token}`
       }
     })
       .then(res => res.json())
       .then(data => {
+        console.log("API DATA:", data);
         setUsers(data)
         setLoading(false)
       })
@@ -41,15 +59,18 @@ function Users() {
 
   return (
 
-    <div style={{ padding: "20px" }}>
-
-      <h1>User Directory</h1>
-
-      <button onClick={logout}>Logout</button>
+    <div className="container">
+      <div className="header">
+       <h1>User Directory</h1>
+       <button className="logout-btn" onClick={logout}>
+       Logout
+       </button>
+      </div>
 
       <br /><br />
 
       <input
+        className="search-box"
         placeholder="Search users..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
@@ -60,9 +81,14 @@ function Users() {
       {loading ? (
         <p>Loading users...</p>
       ) : (
-        filteredUsers.map(user => (
-          <UserCard key={user.id} user={user} />
+        <div className="user-list">
+          {
+            filteredUsers.map(user => (<UserCard key={user.id} user={user} />
         ))
+          }
+        </div>
+
+        
       )}
 
     </div>
