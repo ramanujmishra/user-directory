@@ -28,8 +28,10 @@ function Login() {
   const handleLogin = async () => {
     console.log("Login clicked");
 
-    const response = await fetch(`https://localhost:7032/login?Username=${username}&Password=${password}`,{
-      method: "POST"
+    //Use url https://localhost:7032/login if want to get Token in response
+    const response = await fetch(`https://localhost:7032/loginWithHttpOnlyCookie?Username=${username}&Password=${password}`,{
+      method: "POST",
+      credentials: "include" // for saving HttpOnly cookies 
      
     });
 
@@ -40,18 +42,19 @@ function Login() {
       alert("Invalid credentials");
       return;
     }
+    
+    navigate("/users");
+    //  let data =  await response.json();
+    //  const token = data.token;
 
-     let data =  await response.json();
-     const token = data.token;
-
-     if(token){
-      localStorage.setItem("token", token);
-      navigate("/users");
-     }
-     else{
-      console.log("token not found in response");
-      alert("Login failed");
-     }
+    //  if(token){
+    //   localStorage.setItem("token", token);
+    //   navigate("/users");
+    //  }
+    //  else{
+    //   console.log("token not found in response");
+    //   alert("Login failed");
+    //  }
     };
     
     return (

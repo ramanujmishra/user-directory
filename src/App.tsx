@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Login from "./pages/Login"
 import Users from "./pages/Users"
-import ProtectedRoute from "./components/ProtectedRoute"
+
 
 function App() {
 
@@ -15,11 +15,12 @@ function App() {
 
         <Route
           path="/users"
-          element={
-            <ProtectedRoute>
-              <Users />
-            </ProtectedRoute>
-          }
+          // element={
+          //   <ProtectedRoute>
+          //     <Users />
+          //   </ProtectedRoute>
+          // }
+           element={<Users />}
         />
 
       </Routes>

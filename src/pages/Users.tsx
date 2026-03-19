@@ -11,32 +11,31 @@ function Users() {
 
   const navigate = useNavigate()
 
-  // useEffect(() => {
+  //Needed if using local storage for saving the token on client side
+  //   useEffect(() => {
 
   //   const token = localStorage.getItem("token")
 
-  //   fetch("https://jsonplaceholder.typicode.com/users", {
+  //   fetch("https://localhost:7032/api/users", {
   //     headers: {
   //       Authorization: `Bearer ${token}`
   //     }
   //   })
   //     .then(res => res.json())
   //     .then(data => {
+  //       console.log("API DATA:", data);
   //       setUsers(data)
   //       setLoading(false)
   //     })
 
   // }, [])
 
-    useEffect(() => {
+  //using HttpOnly Cookies for saving the token on client side
+      useEffect(() => {
 
-    const token = localStorage.getItem("token")
-
-    fetch("https://localhost:7032/api/users", {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
+      fetch("https://localhost:7032/api/users", {
+        credentials: "include" //for including httpOnly cookies
+      })
       .then(res => res.json())
       .then(data => {
         console.log("API DATA:", data);
@@ -48,9 +47,11 @@ function Users() {
 
   const logout = () => {
 
-    localStorage.removeItem("token")
-
-    navigate("/")
+      fetch("https://localhost:7032/logout", {
+        method: "POST",
+        credentials: "include" //for including httpOnly cookies
+      })
+     navigate("/")
   }
 
   const filteredUsers = users.filter(user =>
