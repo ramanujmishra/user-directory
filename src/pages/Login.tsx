@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import "../components/LoginPage.css"
 
@@ -6,6 +6,7 @@ function Login() {
 
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+  const [csrfToken,setCsrfToken] = useState("")
 
   const navigate = useNavigate()
 
@@ -24,14 +25,33 @@ function Login() {
   //     alert("Invalid credentials")
   //   }
   // }
+  const getCSRFToken= async () =>{
+     console.log("getting csrf token");
+    const response = await fetch("https://localhost:7032/csrf-token",{
+      credentials : "include"
+    });
+
+    var result = await response.json();
+    return result.csrfToken;
+  }
   
   const handleLogin = async () => {
     console.log("Login clicked");
+    console.log("getting csrf token");
 
+    const csrfToken = await getCSRFToken();
     //Use url https://localhost:7032/login if want to get Token in response
-    const response = await fetch(`https://localhost:7032/loginWithHttpOnlyCookie?Username=${username}&Password=${password}`,{
+    const response = await fetch("https://localhost:7032/loginWithHttpOnlyCookie",{
       method: "POST",
-      credentials: "include" // for saving HttpOnly cookies 
+      credentials: "include", // for saving HttpOnly cookies,
+      headers: {
+        "content-type" : "application/json",
+        "X-CSRF-TOKEN" : csrfToken
+      },
+      body: JSON.stringify({
+      username,
+      password
+  }) 
      
     });
 

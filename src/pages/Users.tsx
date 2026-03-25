@@ -8,6 +8,7 @@ function Users() {
   const [users, setUsers] = useState<User[]>([])
   const [search, setSearch] = useState("")
   const [loading, setLoading] = useState(true)
+  const [csrfToken, setCsrfToken] = useState("")
 
   const navigate = useNavigate()
 
@@ -30,11 +31,23 @@ function Users() {
 
   // }, [])
 
+  useEffect(()=>{
+   fetch("https://localhost:7032/csrf-token",{
+      credentials: "include"
+    }).then(res=>res.json()).
+    then(x=>setCsrfToken(x.csrfToken))
+  },[])
+
   //using HttpOnly Cookies for saving the token on client side
       useEffect(() => {
+      if(!csrfToken) return;
 
       fetch("https://localhost:7032/api/users", {
-        credentials: "include" //for including httpOnly cookies
+        credentials: "include", //for including httpOnly cookies,
+        headers:{
+          "Content-Type":"application/json",
+          "X-CSRF-TOKEN": csrfToken
+        }
       })
       .then(res => res.json())
       .then(data => {
@@ -43,13 +56,19 @@ function Users() {
         setLoading(false)
       })
 
-  }, [])
+  }, [csrfToken])
+
+  
 
   const logout = () => {
 
       fetch("https://localhost:7032/logout", {
         method: "POST",
-        credentials: "include" //for including httpOnly cookies
+        credentials: "include", //for including httpOnly cookies,
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": csrfToken
+        }
       })
      navigate("/")
   }
